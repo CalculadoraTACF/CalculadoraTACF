@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora TACF</title>
+    <meta name="description"
+        content="Calculadora do Teste de Avaliação do Condicionamento Físico (TACF) para militares.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="bg-deco">
+        <div class="orb orb-a"></div>
+        <div class="orb orb-b"></div>
+    </div>
+
+    <main class="layout-wrap">
+        <header class="topo-app">
+            <h1>Calculadora do TACF</h1>
+            <p class="desc-topo">Teste de Avaliação do Condicionamento Físico (NSCA 54-3)</p>
+
+            <div class="seletor-genero">
+                <div class="opcao-grupo">
+                    <input type="radio" name="sexo" value="M" id="gen-masc" checked>
+                    <label for="gen-masc"><i class="fa-solid fa-mars"></i> Masculino</label>
+                    <input type="radio" name="sexo" value="F" id="gen-fem">
+                    <label for="gen-fem"><i class="fa-solid fa-venus"></i> Feminino</label>
+                </div>
+            </div>
+        </header>
+
+        <form id="form-avaliacao">
+            <!-- Top Grid: 4 Cards -->
+            <div class="grade-itens">
+
+                <!-- Card 1: Dados do Avaliado -->
+                <div class="painel painel-avaliado">
+                    <h2><i class="fa-solid fa-user"></i> Dados do Avaliado</h2>
+                    <div class="linha-dupla" style="margin-bottom:4px">
+                        <div class="campo">
+                            <label for="idade">Idade</label>
+                            <input type="number" id="idade" name="idade" min="17" max="70" placeholder="Ex: 32"
+                                required>
+                            <div class="campo-erro" id="erro-idade"></div>
+                        </div>
+                        <div class="campo">
+                            <label for="estatura">Estatura</label>
+                            <input type="number" id="estatura" name="estatura" min="140" max="220" step="1"
+                                placeholder="Ex: 175" required>
+                            <div class="campo-erro" id="erro-estatura"></div>
+                        </div>
+                    </div>
+                    <div class="campo" style="margin-top: 8px;">
+                        <label for="peso">Peso (kg)</label>
+                        <input type="number" id="peso" name="peso" min="30" max="200" step="0.1" placeholder="Ex: 75.5">
+                    </div>
+                </div>
+
+                <!-- Card 2: Cintura -->
+                <div class="painel">
+                    <h2 id="nome-cintura"><i class="fa-solid fa-ruler-horizontal"></i> OIC 01 - Cintura</h2>
+                    <div class="campo">
+                        <label for="cintura">Circunferência (cm)</label>
+                        <input type="number" id="cintura" name="cintura" step="0.1" required placeholder="Ex: 85.5">
+                    </div>
+
+                </div>
+
+                <!-- Card 3: Flexão -->
+                <div class="painel">
+                    <h2 id="nome-flexao">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                            style="vertical-align: text-bottom; color: var(--primary); margin-right: 4px;">
+                            <circle cx="18" cy="6" r="2.5" fill="currentColor" stroke="none" />
+                            <path d="M16 8 L9 12 L2 18" />
+                            <path d="M14 9 L14 18" />
+                            <path d="M10 11.5 L10 18" />
+                        </svg>
+                        OIC 02 - Flexão
+                    </h2>
+                    <div class="campo">
+                        <label for="flexao">Repetições</label>
+                        <input type="number" id="flexao" name="flexao" required placeholder="Ex: 30">
+                    </div>
+                    <p class="aviso" id="info-flexao">Apoio de frente sobre o solo, sem pausa.</p>
+                </div>
+
+                <!-- Card 4: Abdominal -->
+                <div class="painel">
+                    <h2 id="nome-abdominal">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                            style="vertical-align: text-bottom; color: var(--primary); margin-right: 4px;">
+                            <circle cx="17.5" cy="8" r="2.5" fill="currentColor" stroke="none" />
+                            <path d="M16 11 L10 18 L5 12 L2 18" />
+                            <path d="M14 13 L8 13" />
+                        </svg>
+                        OIC 03 - Abdominal
+                    </h2>
+                    <div class="campo">
+                        <label for="abdominal">Repetições em 1 min</label>
+                        <input type="number" id="abdominal" name="abdominal" required placeholder="Ex: 40">
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Corrida / Marcha -->
+            <div class="painel painel-corrida">
+                <div class="cabec-aerobico">
+                    <h2 id="nome-aerobico"><i class="fa-solid fa-person-running"></i> OIC 04 - Capacidade Aeróbica</h2>
+
+                    <div class="caixa-chave" title="Aplicável apenas com parecer médico">
+                        <span class="txt-chave">Substituir por Marcha (4,8km)</span>
+                        <label class="interruptor">
+                            <input type="checkbox" id="chave-marcha">
+                            <span class="trilho arredondado"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="grupo-corrida" class="campo grupo-ativo">
+                    <label for="corrida">Distância percorrida em 12 min (metros)</label>
+                    <input type="number" id="corrida" name="corrida" placeholder="Ex: 2400" required>
+                </div>
+
+                <div id="grupo-marcha" class="campo oculto">
+                    <label>Tempo na Marcha</label>
+                    <div class="entradas-marcha">
+                        <input type="number" id="marcha-min" name="marcha-min" placeholder="Minutos" min="0">
+                        <span class="sep-tempo">:</span>
+                        <input type="number" id="marcha-seg" name="marcha-seg" placeholder="Segundos" min="0" max="59">
+                    </div>
+                    <p class="aviso alerta-vermelho esp-1">
+                        A marcha é substitutivo: aplicável apenas com parecer médico.
+                    </p>
+                </div>
+            </div>
+
+            <div style="margin-top: 0.5rem;">
+                <button type="submit" class="acao-principal" id="btn-calcular">
+                    Calcular Resultado
+                    <i class="fa-solid fa-calculator"></i>
+                </button>
+            </div>
+        </form>
+
+
+        <div id="painel-resultados" class="oculto esp-2"
+            style="max-width: 1500px; margin-left: auto; margin-right: auto;">
+
+            <div class="topo-resultado">
+                <div class="titulo-resultado">
+                    <h1>Resultado</h1>
+                </div>
+                <div class="selo-apto" id="indicador-final">
+                    APTO (A)
+                </div>
+            </div>
+
+            <!-- =========================
+                 4 CARDS
+            ========================== -->
+            <div class="grade-oic">
+
+                <!-- OIC 01 -->
+                <div class="cartao-oic">
+                    <div class="oic-codigo" id="saida-cint-tit">OIC 01 - Cintura</div>
+
+                    <div class="oic-imagem">
+                        <img id="foto-cint" src="images/icone-cintura-m.png" alt="Cintura"
+                            title="Tamanho ideal da imagem: 135x135px">
+                    </div>
+
+                    <div class="rotulo">Desempenho</div>
+                    <div class="valor-perf" id="saida-cint-val">-- <small>cm</small></div>
+                    <div class="desc-perf">&nbsp;</div>
+
+                    <div class="rotulo">Situação</div>
+                    <div id="saida-cint-sit">
+                    </div>
+
+                    <div class="bloco-pontos">
+                        <div class="rotulo">Pontos</div>
+                        <div class="num-pontos" id="saida-cint-pts">--</div>
+                    </div>
+                </div>
+
+                <!-- OIC 02 -->
+                <div class="cartao-oic">
+                    <div class="oic-codigo" id="saida-flex-tit">OIC 02 - Flexão de braços</div>
+
+                    <div class="oic-imagem">
+                        <img id="foto-flex" src="images/icone-flexao-m.png" alt="Flexão"
+                            title="Tamanho ideal da imagem: 135x135px">
+                    </div>
+
+                    <div class="rotulo">Desempenho</div>
+                    <div class="valor-perf" id="saida-flex-val">-- <small>reps</small></div>
+                    <div class="desc-perf">&nbsp;</div>
+
+                    <div class="rotulo">Situação</div>
+                    <div id="saida-flex-sit">
+                        <!-- renderSit here -->
+                    </div>
+
+                    <div class="bloco-pontos">
+                        <div class="rotulo">Pontos</div>
+                        <div class="num-pontos" id="saida-flex-pts">--</div>
+                    </div>
+                </div>
+
+                <!-- OIC 03 -->
+                <div class="cartao-oic">
+                    <div class="oic-codigo" id="saida-abd-tit">OIC 03 - Abdominal</div>
+
+                    <div class="oic-imagem">
+                        <img id="foto-abd" src="images/icone-abdominal-m.png" alt="Abdominal"
+                            title="Tamanho ideal da imagem: 135x135px">
+                    </div>
+
+                    <div class="rotulo">Desempenho</div>
+                    <div class="valor-perf" id="saida-abd-val">-- <small>reps</small></div>
+                    <div class="desc-perf">&nbsp;</div>
+
+                    <div class="rotulo">Situação</div>
+                    <div id="saida-abd-sit">
+                    </div>
+
+                    <div class="bloco-pontos">
+                        <div class="rotulo">Pontos</div>
+                        <div class="num-pontos" id="saida-abd-pts">--</div>
+                    </div>
+                </div>
+
+                <!-- OIC 04 -->
+                <div class="cartao-oic">
+                    <div class="oic-codigo" id="saida-aer-tit">OIC 04 - Capacidade Aeróbica</div>
+
+                    <div class="oic-imagem">
+                        <img id="foto-aer" src="images/icone-aerobico-m.png" alt="Aeróbico"
+                            title="Tamanho ideal da imagem: 135x135px">
+                    </div>
+
+                    <div class="rotulo">Desempenho</div>
+                    <div class="valor-perf" id="saida-aer-val">-- <small>m</small></div>
+                    <div class="desc-perf">&nbsp;</div>
+
+                    <div class="rotulo">Situação</div>
+                    <div id="saida-aer-sit">
+                    </div>
+
+                    <div class="bloco-pontos">
+                        <div class="rotulo">Pontos</div>
+                        <div class="num-pontos" id="saida-aer-pts">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- =========================
+                 RESUMO
+            ========================== -->
+            <div class="resumo-final">
+
+                <div class="caixa-total">
+                    <div class="desc-total">
+                        Somatório (Grau Final, escala 0–100)
+                    </div>
+                    <div class="val-total" id="val-somatoria">
+                        -- <small>/ 100</small>
+                    </div>
+                </div>
+
+                <div class="conceito-global" id="card-conceito">
+                    <div class="conceito-grade" id="conceito-sigla">
+                        --
+                    </div>
+                    <div class="conceito-desc" id="conceito-descricao">
+                        Conceituação Global: <span id="conceito-label">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="painel painel-imc" id="card-imc" style="margin-top: 24px; display: none;">
+                <div class="imc-top">
+                    <div class="imc-valor-box">
+                        <div class="imc-rotulo">Seu IMC É:</div>
+                        <div class="imc-numero" id="imc-valor">--</div>
+                        <div class="imc-unidade">kg/m²</div>
+                    </div>
+                    <div class="imc-classif-box">
+                        <div class="imc-classif-rotulo">Classificação:</div>
+                        <div class="imc-classif-badge" id="imc-badge">--</div>
+                    </div>
+                </div>
+                <div class="imc-barra-container">
+                    <div class="imc-marcador" id="imc-marcador" style="left: 0%">▼</div>
+                    <div class="imc-barra">
+                        <div class="imc-seg imc-seg-magro"></div>
+                        <div class="imc-seg imc-seg-normal"></div>
+                        <div class="imc-seg imc-seg-sobre"></div>
+                        <div class="imc-seg imc-seg-obeso"></div>
+                        <div class="imc-seg imc-seg-grave"></div>
+                    </div>
+                    <div class="imc-barra-labels">
+                        <span>Magreza<br>&lt;18,5</span>
+                        <span>Peso Normal<br>18,5–24,9</span>
+                        <span>Sobrepeso<br>25–29,9</span>
+                        <span>Obesidade<br>30–39,9</span>
+                        <span>Ob. Grave<br>≥40</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="painel painel-metas" id="bloco-metas" style="margin-top: 24px;">
+                <div class="metas-header">
+                    <div class="metas-titulo-wrap">
+                        <div>
+                            <h2 class="metas-titulo">Metas e Objetivos para o Próximo TACF</h2>
+                            <p class="metas-subtitulo">Veja o que precisa melhorar.</p>
+                        </div>
+                    </div>
+                    <div class="seletor-meta">
+                        <label for="sel-objetivo">Quero atingir:</label>
+                        <div class="select-wrapper">
+                            <select id="sel-objetivo">
+                                <option value="S">Satisfatório (S)</option>
+                                <option value="B" selected>Bom (B)</option>
+                                <option value="MB">Muito Bom (MB)</option>
+                                <option value="E">Excelente (E)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div id="corpo-metas" class="metas-cards"></div>
+                <div class="tabela-scroll" style="display:none; margin-bottom: 0;">
+                    <table class="tab-resultado tabela-metas">
+                        <thead>
+                            <tr>
+                                <th>OIC</th>
+                                <th>Seu resultado atual</th>
+                                <th id="cabec-minimo">Valor Mínimo Necessário para Bom (B)</th>
+                                <th>Valor Necessário para Pontuação Máxima</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+
+            <button type="button" class="acao-secundaria esp-2" id="btn-reiniciar">Fazer novo cálculo</button>
+
+        </div>
+    </main>
+
+    <footer class="rodape-app">
+        <p>Criado por 2S Luís Henrique &mdash; EEAR &bull; Com base nos parâmetros da <strong>NSCA 54-3</strong></p>
+    </footer>
+
+    <script src="tacf_tables.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
