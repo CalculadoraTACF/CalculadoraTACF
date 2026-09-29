@@ -1596,6 +1596,9 @@ input:checked+.trilho:before {
     outline: none;
     transition: all 0.2s;
     width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* Focus no TACF Anterior */
