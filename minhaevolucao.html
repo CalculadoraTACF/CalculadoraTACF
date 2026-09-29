@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Evolução — Calculadora TACF</title>
+    <meta name="description"
+        content="Acompanhe sua evolução no Teste de Avaliação do Condicionamento Físico (TACF), comparando resultados entre avaliações.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+</head>
+
+<body>
+    <!-- Decoração de fundo (igual ao index.html) -->
+    <div class="bg-deco">
+        <div class="orb orb-a"></div>
+        <div class="orb orb-b"></div>
+    </div>
+
+    <main class="layout-wrap">
+
+        <!-- Botão Voltar -->
+        <div class="btn-voltar-wrap">
+            <a href="index.html" class="btn-voltar">
+                <i class="fa-solid fa-arrow-left"></i> Voltar à Calculadora
+            </a>
+        </div>
+
+        <!-- Cabeçalho da página -->
+        <header class="evolucao-page-header">
+            <h1>Minha Evolução</h1>
+            <p class="desc-topo">Compare seus TACFs e veja sua evolução nos OICs</p>
+        </header>
+
+        <!-- Card principal -->
+        <div class="evolucao-page-card">
+
+            <div class="evolucao-page-card-header">
+                <div>
+                    <h2>Comparativo de TACFs</h2>
+                    <p>Preencha os dados do TACF anterior e do atual para visualizar sua evolução</p>
+                </div>
+            </div>
+
+            <div class="evolucao-page-body">
+
+                <!-- FORMULÁRIOS DE DADOS -->
+                <div class="evolucao-form-grid">
+
+                    <!-- TACF Passado -->
+                    <div class="ev-form-card ev-card-passado">
+                        <div class="ev-card-titulo">
+                            <span>TACF Anterior</span>
+                        </div>
+                        <div class="ev-campo">
+                            <label for="ev-cintura-passado">Cintura (cm)</label>
+                            <input type="number" id="ev-cintura-passado" step="0.1" placeholder="Ex: 88.5">
+                        </div>
+                        <div class="ev-campo">
+                            <label for="ev-flexao-passado">Flexão (reps)</label>
+                            <input type="number" id="ev-flexao-passado" placeholder="Ex: 25">
+                        </div>
+                        <div class="ev-campo">
+                            <label for="ev-abdominal-passado">Abdominal (reps/min)</label>
+                            <input type="number" id="ev-abdominal-passado" placeholder="Ex: 35">
+                        </div>
+                        <div class="ev-campo">
+                            <label for="ev-corrida-passado">Corrida 12min (metros)</label>
+                            <input type="number" id="ev-corrida-passado" placeholder="Ex: 2200">
+                        </div>
+                    </div>
+
+                    <!-- TACF Atual -->
+                    <div class="ev-form-card ev-card-atual">
+                        <div class="ev-card-titulo">
+                            <span>TACF Atual</span>
+                        </div>
+                        <div class="ev-campo">
+                            <label for="ev-cintura-atual">Cintura (cm)</label>
+                            <input type="number" id="ev-cintura-atual" step="0.1" placeholder="Ex: 85.0">
+                        </div>
+                        <div class="ev-campo">
+                            <label for="ev-flexao-atual">Flexão (reps)</label>
+                            <input type="number" id="ev-flexao-atual" placeholder="Ex: 30">
+                        </div>
+                        <div class="ev-campo">
+                            <label for="ev-abdominal-atual">Abdominal (reps/min)</label>
+                            <input type="number" id="ev-abdominal-atual" placeholder="Ex: 40">
+                        </div>
+                        <div class="ev-campo">
+                            <label for="ev-corrida-atual">Corrida 12min (metros)</label>
+                            <input type="number" id="ev-corrida-atual" placeholder="Ex: 2500">
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Botões de ação -->
+                <div class="ev-btn-row">
+                    <button type="button" id="btn-gerar-evolucao" class="btn-gerar-ev">
+                        Gerar Relatório
+                    </button>
+                    <button type="button" id="btn-limpar-evolucao" class="btn-limpar-ev">
+                        <i class="fa-solid fa-eraser"></i> Limpar
+                    </button>
+                </div>
+
+                <!-- RESULTADOS -->
+                <div id="evolucao-resultados" class="oculto"
+                    style="display:flex; flex-direction:column; gap:1.5rem; animation: fadeIn 0.4s ease;">
+
+                    <!-- Gráficos -->
+                    <div class="ev-graficos-grid">
+                        <div class="oic-card-modern">
+                            <div class="oic-header">
+                                <div class="oic-header-left">
+                                    <div class="oic-title-box">
+                                        <h3 style="color: #3b82f6;">CIRCUNFERÊNCIA DA CINTURA</h3>
+                                        <p>Quanto menor, melhor o resultado.</p>
+                                    </div>
+                                </div>
+                                <div class="oic-status-badge" id="cintura-badge-top" style="display: none;">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+
+                            <div class="oic-body">
+                                <div class="oic-chart-area">
+                                    <canvas id="chart-oic01"></canvas>
+                                </div>
+                                <div class="oic-side-cards" id="cintura-side-cards" style="display: none;">
+                                    <div class="oic-delta-container" id="cintura-delta-container"
+                                        style="background: #ffffff; border: 1px solid #eef2f6; border-radius: 12px; padding: 16px;">
+                                        <div class="ev-dc-valores">
+                                            <div class="ev-dc-val-bloco"><span
+                                                    class="ev-dc-val-label">Anterior</span><span class="ev-dc-val-num"
+                                                    id="cintura-val-ant"></span></div><span class="ev-dc-arrow"
+                                                style="margin: 0 10px; color: #94a3b8;">→</span>
+                                            <div class="ev-dc-val-bloco"><span class="ev-dc-val-label">Atual</span><span
+                                                    class="ev-dc-val-num" id="cintura-val-atu"></span></div>
+                                        </div>
+                                        <div class="ev-dc-barra ev-dc-barra-azul" style="margin-top: 10px;"></div>
+                                    </div>
+                                    <div class="oic-side-card var-card">
+                                        <div class="side-card-title">Variação</div>
+                                        <div class="side-card-value" id="cintura-var-value"></div>
+                                        <div class="side-card-sub" id="cintura-var-pct"></div>
+                                    </div>
+                                    <div class="oic-side-card status-card" id="cintura-status-card">
+                                        <div class="side-card-title" id="cintura-status-title"></div>
+                                        <div class="side-card-desc" id="cintura-status-desc"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="oic-footer">
+                                <i class="fa-regular fa-lightbulb"></i>
+                                <p><strong>Dica:</strong> Mantenha uma alimentação equilibrada e pratique exercícios
+                                    para melhorar sua composição corporal.</p>
+                            </div>
+                        </div>
+                        <!-- OIC 02 -->
+                        <div class="oic-card-modern">
+                            <div class="oic-header">
+                                <div class="oic-header-left">
+                                    <div class="oic-title-box">
+                                        <h3 style="color: #22c55e;">FLEXÃO DE BRAÇO</h3>
+                                        <p>Quanto maior, melhor o resultado.</p>
+                                    </div>
+                                </div>
+                                <div class="oic-status-badge" id="flexao-badge-top" style="display: none;"></div>
+                            </div>
+
+                            <div class="oic-body">
+                                <div class="oic-chart-area">
+                                    <canvas id="chart-oic02"></canvas>
+                                </div>
+                                <div class="oic-side-cards" id="flexao-side-cards" style="display: none;">
+                                    <div class="oic-delta-container" id="flexao-delta-container"
+                                        style="background: #ffffff; border: 1px solid #eef2f6; border-radius: 12px; padding: 16px;">
+                                        <div class="ev-dc-valores">
+                                            <div class="ev-dc-val-bloco"><span
+                                                    class="ev-dc-val-label">Anterior</span><span class="ev-dc-val-num"
+                                                    id="flexao-val-ant"></span></div><span class="ev-dc-arrow"
+                                                style="margin: 0 10px; color: #94a3b8;">→</span>
+                                            <div class="ev-dc-val-bloco"><span class="ev-dc-val-label">Atual</span><span
+                                                    class="ev-dc-val-num" id="flexao-val-atu"></span></div>
+                                        </div>
+                                        <div class="ev-dc-barra ev-dc-barra-verde" style="margin-top: 10px;"></div>
+                                    </div>
+                                    <div class="oic-side-card var-card">
+                                        <div class="side-card-title">Variação</div>
+                                        <div class="side-card-value" id="flexao-var-value"></div>
+                                        <div class="side-card-sub" id="flexao-var-pct"></div>
+                                    </div>
+                                    <div class="oic-side-card status-card" id="flexao-status-card">
+                                        <div class="side-card-title" id="flexao-status-title"></div>
+                                        <div class="side-card-desc" id="flexao-status-desc"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="oic-footer">
+                                <i class="fa-regular fa-lightbulb"></i>
+                                <p><strong>Dica:</strong> Mantenha uma rotina de treinos de força e resistência
+                                    localizada.</p>
+                            </div>
+                        </div>
+
+                        <!-- OIC 03 -->
+                        <div class="oic-card-modern">
+                            <div class="oic-header">
+                                <div class="oic-header-left">
+                                    <div class="oic-title-box">
+                                        <h3 style="color: #f97316;">ABDOMINAL</h3>
+                                        <p>Quanto maior, melhor o resultado.</p>
+                                    </div>
+                                </div>
+                                <div class="oic-status-badge" id="abdominal-badge-top" style="display: none;"></div>
+                            </div>
+
+                            <div class="oic-body">
+                                <div class="oic-chart-area">
+                                    <canvas id="chart-oic03"></canvas>
+                                </div>
+                                <div class="oic-side-cards" id="abdominal-side-cards" style="display: none;">
+                                    <div class="oic-delta-container" id="abdominal-delta-container"
+                                        style="background: #ffffff; border: 1px solid #eef2f6; border-radius: 12px; padding: 16px;">
+                                        <div class="ev-dc-valores">
+                                            <div class="ev-dc-val-bloco"><span
+                                                    class="ev-dc-val-label">Anterior</span><span class="ev-dc-val-num"
+                                                    id="abdominal-val-ant"></span></div><span class="ev-dc-arrow"
+                                                style="margin: 0 10px; color: #94a3b8;">→</span>
+                                            <div class="ev-dc-val-bloco"><span class="ev-dc-val-label">Atual</span><span
+                                                    class="ev-dc-val-num" id="abdominal-val-atu"></span></div>
+                                        </div>
+                                        <div class="ev-dc-barra ev-dc-barra-laranja" style="margin-top: 10px;"></div>
+                                    </div>
+                                    <div class="oic-side-card var-card">
+                                        <div class="side-card-title">Variação</div>
+                                        <div class="side-card-value" id="abdominal-var-value"></div>
+                                        <div class="side-card-sub" id="abdominal-var-pct"></div>
+                                    </div>
+                                    <div class="oic-side-card status-card" id="abdominal-status-card">
+                                        <div class="side-card-title" id="abdominal-status-title"></div>
+                                        <div class="side-card-desc" id="abdominal-status-desc"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="oic-footer">
+                                <i class="fa-regular fa-lightbulb"></i>
+                                <p><strong>Dica:</strong> Fortaleça seu core com exercícios variados para melhor
+                                    estabilidade e resistência.</p>
+                            </div>
+                        </div>
+
+                        <!-- OIC 04 -->
+                        <div class="oic-card-modern">
+                            <div class="oic-header">
+                                <div class="oic-header-left">
+                                    <div class="oic-title-box">
+                                        <h3 style="color: #8b5cf6;">CORRIDA</h3>
+                                        <p>Quanto maior, melhor o resultado.</p>
+                                    </div>
+                                </div>
+                                <div class="oic-status-badge" id="corrida-badge-top" style="display: none;"></div>
+                            </div>
+
+                            <div class="oic-body">
+                                <div class="oic-chart-area">
+                                    <canvas id="chart-oic04"></canvas>
+                                </div>
+                                <div class="oic-side-cards" id="corrida-side-cards" style="display: none;">
+                                    <div class="oic-delta-container" id="corrida-delta-container"
+                                        style="background: #ffffff; border: 1px solid #eef2f6; border-radius: 12px; padding: 16px;">
+                                        <div class="ev-dc-valores">
+                                            <div class="ev-dc-val-bloco"><span
+                                                    class="ev-dc-val-label">Anterior</span><span class="ev-dc-val-num"
+                                                    id="corrida-val-ant"></span></div><span class="ev-dc-arrow"
+                                                style="margin: 0 10px; color: #94a3b8;">→</span>
+                                            <div class="ev-dc-val-bloco"><span class="ev-dc-val-label">Atual</span><span
+                                                    class="ev-dc-val-num" id="corrida-val-atu"></span></div>
+                                        </div>
+                                        <div class="ev-dc-barra ev-dc-barra-roxo" style="margin-top: 10px;"></div>
+                                    </div>
+                                    <div class="oic-side-card var-card">
+                                        <div class="side-card-title">Variação</div>
+                                        <div class="side-card-value" id="corrida-var-value"></div>
+                                        <div class="side-card-sub" id="corrida-var-pct"></div>
+                                    </div>
+                                    <div class="oic-side-card status-card" id="corrida-status-card">
+                                        <div class="side-card-title" id="corrida-status-title"></div>
+                                        <div class="side-card-desc" id="corrida-status-desc"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="oic-footer">
+                                <i class="fa-regular fa-lightbulb"></i>
+                                <p><strong>Dica:</strong> Combine treinos contínuos com treinos intervalados (tiros)
+                                    para aumentar seu condicionamento aeróbico.</p>
+                            </div>
+                        </div>
+                        <div class="ev-grafico-card ev-grafico-card-wide">
+                            <div class="ev-grafico-titulo">
+                                Radar
+                                &mdash; Perfil de Desempenho
+                            </div>
+                            <div class="ev-grafico-wrap ev-radar-wrap">
+                                <canvas id="chart-radar"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="rodape-app">
+        <p>Criado por 2S SBO Luís Henrique &mdash; EEAR &bull; Com base nos parâmetros da <strong>NSCA 54-3</strong></p>
+    </footer>
+
+    <script src="evolucao_page.js"></script>
+</body>
+
+</html>

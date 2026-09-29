@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 
 <body>
@@ -24,6 +25,12 @@
         <header class="topo-app">
             <h1>Calculadora do TACF</h1>
             <p class="desc-topo">Teste de Avaliação do Condicionamento Físico (NSCA 54-3)</p>
+
+            <div class="btn-evolucao-wrap">
+                <a href="minhaevolucao.html" class="btn-evolucao">
+                    <i class="fa-solid fa-chart-line"></i> Minha Evolução
+                </a>
+            </div>
 
             <div class="seletor-genero">
                 <div class="opcao-grupo">
@@ -358,6 +365,140 @@
 
         </div>
     </main>
+
+    <!-- ===== TELA MINHA EVOLUÇÃO ===== -->
+    <div id="tela-evolucao" class="tela-evolucao oculto">
+        <div class="evolucao-overlay" id="overlay-evolucao"></div>
+        <div class="evolucao-modal">
+            <div class="evolucao-header">
+                <div class="evolucao-header-left">
+                    <i class="fa-solid fa-chart-line evolucao-header-icon"></i>
+                    <div>
+                        <h2 class="evolucao-titulo">Minha Evolução</h2>
+                        <p class="evolucao-subtitulo">Compare seus TACFs e veja sua evolução nos OICs</p>
+                    </div>
+                </div>
+                <button type="button" id="btn-fechar-evolucao" class="btn-fechar-ev">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="evolucao-body">
+
+                <!-- FORMULÁRIOS DE DADOS -->
+                <div class="evolucao-form-grid">
+
+                    <!-- TACF Passado -->
+                    <div class="ev-form-card ev-card-passado">
+                        <div class="ev-card-titulo">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                            <span>TACF Anterior</span>
+                        </div>
+                        <div class="ev-campo">
+                            <label for="ev-cintura-passado">Cintura (cm)</label>
+                            <input type="number" id="ev-cintura-passado" step="0.1" placeholder="Ex: 88.5">
+                        </div>
+                        <div class="ev-campo">
+                            <label for="ev-flexao-passado">Flexão (reps)</label>
+                            <input type="number" id="ev-flexao-passado" placeholder="Ex: 25">
+                        </div>
+                        <div class="ev-campo">
+                            <label for="ev-abdominal-passado">Abdominal (reps/min)</label>
+                            <input type="number" id="ev-abdominal-passado" placeholder="Ex: 35">
+                        </div>
+                        <div class="ev-campo">
+                            <label for="ev-corrida-passado">Corrida 12min (metros)</label>
+                            <input type="number" id="ev-corrida-passado" placeholder="Ex: 2200">
+                        </div>
+                    </div>
+
+                    <!-- TACF Atual -->
+                    <div class="ev-form-card ev-card-atual">
+                        <div class="ev-card-titulo">
+                            <i class="fa-solid fa-flag-checkered"></i>
+                            <span>TACF Atual</span>
+                        </div>
+                        <div class="ev-campo">
+                            <label for="ev-cintura-atual">Cintura (cm)</label>
+                            <input type="number" id="ev-cintura-atual" step="0.1" placeholder="Ex: 85.0">
+                        </div>
+                        <div class="ev-campo">
+                            <label for="ev-flexao-atual">Flexão (reps)</label>
+                            <input type="number" id="ev-flexao-atual" placeholder="Ex: 30">
+                        </div>
+                        <div class="ev-campo">
+                            <label for="ev-abdominal-atual">Abdominal (reps/min)</label>
+                            <input type="number" id="ev-abdominal-atual" placeholder="Ex: 40">
+                        </div>
+                        <div class="ev-campo">
+                            <label for="ev-corrida-atual">Corrida 12min (metros)</label>
+                            <input type="number" id="ev-corrida-atual" placeholder="Ex: 2500">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="ev-btn-row">
+                    <button type="button" id="btn-gerar-evolucao" class="btn-gerar-ev">
+                        Gerar Relatório
+                    </button>
+                    <button type="button" id="btn-limpar-evolucao" class="btn-limpar-ev">
+                        <i class="fa-solid fa-eraser"></i> Limpar
+                    </button>
+                </div>
+
+                <!-- RESULTADOS DE EVOLUÇÃO -->
+                <div id="evolucao-resultados" class="evolucao-resultados oculto">
+
+                    <!-- Cards de delta -->
+                    <div class="ev-delta-secao" id="ev-delta-cards"></div>
+
+                    <!-- Gráficos -->
+                    <div class="ev-graficos-grid">
+                        <div class="ev-grafico-card">
+                            <div class="ev-grafico-titulo"><i class="fa-solid fa-ruler-horizontal"
+                                    style="color:#7c3aed;margin-right:6px;"></i>OIC 01 &mdash; Cintura</div>
+                            <div class="ev-grafico-wrap">
+                                <canvas id="chart-oic01"></canvas>
+                            </div>
+                        </div>
+                        <div class="ev-grafico-card">
+                            <div class="ev-grafico-titulo"><i class="fa-solid fa-dumbbell"
+                                    style="color:#7c3aed;margin-right:6px;"></i>OIC 02 &mdash; Flexão</div>
+                            <div class="ev-grafico-wrap">
+                                <canvas id="chart-oic02"></canvas>
+                            </div>
+                        </div>
+                        <div class="ev-grafico-card">
+                            <div class="ev-grafico-titulo"><i class="fa-solid fa-fire-flame-curved"
+                                    style="color:#7c3aed;margin-right:6px;"></i>OIC 03 &mdash; Abdominal</div>
+                            <div class="ev-grafico-wrap">
+                                <canvas id="chart-oic03"></canvas>
+                            </div>
+                        </div>
+                        <div class="ev-grafico-card">
+                            <div class="ev-grafico-titulo"><i class="fa-solid fa-person-running"
+                                    style="color:#7c3aed;margin-right:6px;"></i>OIC 04 &mdash; Corrida</div>
+                            <div class="ev-grafico-wrap">
+                                <canvas id="chart-oic04"></canvas>
+                            </div>
+                        </div>
+                        <div class="ev-grafico-card ev-grafico-card-wide">
+                            <div class="ev-grafico-titulo"><i class="fa-solid fa-chart-area"
+                                    style="color:#7c3aed;margin-right:6px;"></i>Radar &mdash; Perfil de Desempenho</div>
+                            <div class="ev-grafico-wrap ev-radar-wrap">
+                                <canvas id="chart-radar"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- ===== FIM TELA EVOLUÇÃO ===== -->
 
     <footer class="rodape-app">
         <p>Criado por 2S SBO Luís Henrique &mdash; EEAR &bull; Com base nos parâmetros da <strong>NSCA 54-3</strong></p>
